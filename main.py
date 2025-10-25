@@ -1,5 +1,6 @@
-# manager_bot_v2.py
-# Powered bot by @hackermbrebed
+# bot manajemen final skrip
+# copy right @hackermbrebed
+# Powered bot by kaisar udin
 
 import os
 import logging
@@ -23,14 +24,14 @@ logging.basicConfig(
     level=logging.INFO
 )
 logging.getLogger("httpx").setLevel(logging.WARNING)
-logger = logging.getLogger("ManagerBotV2")
+logger = logging.getLogger("ManagerBotFinalV4")
 
 
 # ----------------------------------------------------------------------
 ## KONFIGURASI GLOBAL & PERMANEN
 # ----------------------------------------------------------------------
 
-# Pesan penyambutan PERMANEN (diambil dari skrip, tidak bisa diubah via bot lagi)
+# Pesan penyambutan PERMANEN
 WELCOME_MESSAGE = (
     "<blockquote>👋𝙒𝙀𝙇𝘾𝙊𝙈𝙀, {user_name}! 𝙎𝙚𝙡𝙖𝙢𝙖𝙩 𝙗𝙚𝙧𝙜𝙖𝙗𝙪𝙣𝙜 𝙙𝙞 𝙜𝙧𝙪𝙥 𝙠𝙖𝙢𝙞🎉</blockquote>\n\n"
     "╭❈━━━━━━❖ ❖━━━━━━❈╮\n"
@@ -45,13 +46,11 @@ WELCOME_MESSAGE = (
     "<blockquote>𝘗𝘰𝘸𝘦𝘳𝘦𝘥 𝘣𝘰𝘵 𝘣𝘺 𝕂𝕒𝕚𝕤𝕒𝕣 𝕌𝕕𝕚𝕟👑</blockquote>"
 )
 
-# Konfigurasi foto dan tombol yang BISA disetel oleh admin global
 GLOBAL_PHOTO_FILE_ID = None
 GLOBAL_BUTTONS_CONFIG = [
     ['🤖𝙋𝙚𝙢𝙞𝙡𝙞𝙠 𝘽𝙊𝙏', 'https://t.me/udiens123'],
 ]
 
-# Variabel konfigurasi baru
 BUTTON_SETUP_DATA = {}
 RULES_MESSAGE = "❌ Aturan grup belum ditetapkan. Gunakan /setrules untuk mengaturnya."
 
@@ -70,6 +69,7 @@ def create_inline_keyboard(config):
 
     i = 0
     while i < len(inline_btns):
+        # Memungkinkan dua tombol per baris jika memungkinkan
         if (len(inline_btns) - i >= 2) and (len(keyboard_buttons) % 2 == 0):
             keyboard_buttons.append(inline_btns[i:i+2])
             i += 2
@@ -104,7 +104,9 @@ def admin_private_only(func):
     return wrapper
 
 async def is_group_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> bool:
-    """Mengecek apakah pengguna adalah admin (Creator/Administrator) di grup saat ini."""
+    """
+    Mengecek apakah pengguna adalah admin (Creator/Administrator) di grup saat ini.
+    """
     if update.effective_chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
         await update.message.reply_text("Perintah ini hanya berlaku di grup.")
         return False
@@ -113,8 +115,8 @@ async def is_group_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         update.effective_chat.id, update.effective_user.id
     )
     
-    if chat_member.status not in [ChatMember.CREATOR, ChatMember.ADMINISTRATOR]:
-        await update.message.reply_text("⛔️ Anda harus menjadi Admin grup untuk menggunakan perintah ini.")
+    if chat_member.status not in ['creator', 'administrator']:
+        await update.message.reply_text("⛔️ Lu bukan admin nyet!")
         return False
     
     return True
@@ -132,6 +134,7 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
     chat = update.effective_chat
     for member in update.message.new_chat_members:
+        # Abaikan pesan jika yang join adalah bot
         if member.is_bot: continue
         
         user_id = member.id
@@ -146,6 +149,7 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
         reply_markup = create_inline_keyboard(GLOBAL_BUTTONS_CONFIG)
         
+        # Kirim foto atau teks
         if GLOBAL_PHOTO_FILE_ID:
             try:
                 await context.bot.send_photo(
@@ -153,6 +157,7 @@ async def welcome_new_member(update: Update, context: ContextTypes.DEFAULT_TYPE)
                     reply_markup=reply_markup, parse_mode=ParseMode.HTML
                 )
             except Exception:
+                # Fallback ke pesan teks jika foto gagal (misalnya ID hilang)
                 await context.bot.send_message(
                     chat_id=chat.id, text=formatted_message,
                     reply_markup=reply_markup, parse_mode=ParseMode.HTML
@@ -170,14 +175,14 @@ async def set_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     
     if not context.args:
         await update.message.reply_text(
-            "Format: `/setrules Teks Aturan Anda`. Gunakan Markdown/HTML untuk format.",
+            "Cara gunainnya gini nyet : /setrules isi text rules yang mau lu jadiin rules.",
             parse_mode=ParseMode.MARKDOWN
         )
         return
 
     new_rules = " ".join(context.args)
     RULES_MESSAGE = new_rules
-    await update.message.reply_text("✅ Aturan grup berhasil diperbarui!")
+    await update.message.reply_text("✅ Rules sudah diperbarui.")
 
 async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan aturan grup (/rules)."""
@@ -187,9 +192,11 @@ async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
         return
 
     try:
+        # Coba parsing sebagai HTML/Markdown
         await update.message.reply_text(RULES_MESSAGE, parse_mode=ParseMode.HTML)
     except:
-        await update.message.reply_text(RULES_MESSAGE, parse_mode=ParseMode.MARKDOWN) # Fallback
+        # Fallback ke teks biasa jika ada error parsing
+        await update.message.reply_text(RULES_MESSAGE)
 
 # ----------------------------------------------------------------------
 ## HANDLER UTILITAS & MODERASI
@@ -198,7 +205,7 @@ async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mengukur latency bot (/ping)."""
     if update.effective_chat.type == ChatType.PRIVATE:
-        await update.message.reply_text("Bot aktif. Latensi hanya dapat diukur di grup.")
+        await update.message.reply_text("Pong! Bot aktif.")
         return
         
     start_time = update.message.date.timestamp()
@@ -206,14 +213,14 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     end_time = sent_message.date.timestamp()
     latency = round((end_time - start_time) * 1000)
     
-    await sent_message.edit_text(f"Pong! 🏓 Latensi: **{latency}ms**", parse_mode=ParseMode.MARKDOWN)
+    await sent_message.edit_text(f"Pong! 🏓 Speed: **{latency}ms**", parse_mode=ParseMode.MARKDOWN)
 
-async def vctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Mengubah judul obrolan suara/video grup (/vctitle)."""
+async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """MENGUBAH NAMA GC"""
     if not await is_group_admin(update, context): return
     
     if not context.args:
-        await update.message.reply_text("Format: `/vctitle Judul Obrolan Suara Baru`")
+        await update.message.reply_text("Cara gunainnya /gctitle Nama GC")
         return
         
     new_title = " ".join(context.args)
@@ -222,14 +229,15 @@ async def vctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         return
 
     try:
+        # Menggunakan set_chat_title untuk mengubah Nama Grup, yang akan ditampilkan sebagai judul VC.
         await context.bot.set_chat_title(
             chat_id=update.effective_chat.id,
             title=new_title
         )
-        await update.message.reply_text(f"✅ Judul grup berhasil diubah menjadi **{new_title}**.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Nama Grup berhasil diubah menjadi **{new_title}**.", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
-        logger.error(f"Gagal ubah judul VC: {e}")
-        await update.message.reply_text("❌ Gagal mengubah judul. Pastikan bot memiliki izin **'Change Group Info'**.")
+        logger.error(f"Gagal ubah judul GC: {e}")
+        await update.message.reply_text("❌ Gagal mengubah Nama Grup. Pastikan bot memiliki izin Full Akses.")
 
 async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan daftar admin grup (/adminlist)."""
@@ -243,19 +251,17 @@ async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         for admin in admins:
             user = admin.user
             status = admin.status
-            name = user.full_name
             
-            if user.is_bot:
-                continue
+            if user.is_bot: continue
                 
-            line = f"• {name} (`{user.id}`)"
-            if status == ChatMember.CREATOR:
-                line = f"👑 {name} (`Creator`)"
+            line = f"• {user.full_name} (`{user.id}`)"
+            
+            if status == 'creator':
+                line = f"👑 {user.full_name} (`Creator`)"
             elif admin.custom_title:
-                 line = f"🔸 {name} (`{admin.custom_title}`)"
+                 line = f"🔸 {user.full_name} (`{admin.custom_title}`)"
             
             admin_list.append(line)
-            
         
         response = f"**Daftar Admin Grup {update.effective_chat.title} ({len(admin_list)}):**\n\n" + "\n".join(admin_list)
         await update.message.reply_text(response, parse_mode=ParseMode.MARKDOWN)
@@ -265,168 +271,96 @@ async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text("❌ Gagal mengambil daftar admin.")
 
 async def reload_config(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Perintah untuk reload konfigurasi (simulasi) oleh admin global."""
+    """Perintah untuk reload konfigurasi (simulasi) oleh admin grup."""
     if not await is_group_admin(update, context): return
-    
-    # Karena konfigurasi (photo/button/rules) disimpan di memori,
-    # 'reload' di sini hanya berfungsi sebagai penanda log & konfirmasi admin.
-    await update.message.reply_text("⚙️ Konfigurasi bot (Rules, Foto, Tombol) telah dimuat ulang dari memori.")
-    
-async def anonadmin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Mengatur anonimitas admin bot saat membalas pesan (/anonadmin)."""
-    if not await is_group_admin(update, context): return
-    
-    if update.effective_chat.type not in [ChatType.SUPERGROUP]:
-        await update.message.reply_text("Perintah ini hanya berlaku di Supergrup.")
-        return
-
-    current_member = await context.bot.get_chat_member(update.effective_chat.id, context.bot.id)
-    
-    if current_member.status != ChatMember.ADMINISTRATOR:
-        await update.message.reply_text("Bot ini bukan admin grup, tidak bisa mengubah pengaturan anonimitas.")
-        return
-        
-    # Toggle Anonimitas
-    new_anonimity_status = not current_member.is_anonymous
-    
-    try:
-        await context.bot.set_chat_administrator_custom_title(
-            chat_id=update.effective_chat.id,
-            user_id=context.bot.id,
-            custom_title=current_member.custom_title if current_member.custom_title else "Bot",
-            is_anonymous=new_anonimity_status
-        )
-        status_text = "DI-AKTIFKAN" if new_anonimity_status else "DI-NONAKTIFKAN"
-        await update.message.reply_text(f"✅ Mode anonimitas bot saat membalas pesan **{status_text}**.", parse_mode=ParseMode.MARKDOWN)
-    
-    except Exception as e:
-        logger.error(f"Gagal set anonimitas: {e}")
-        await update.message.reply_text("❌ Gagal mengubah status anonimitas. Pastikan bot adalah Admin dengan izin 'Change Group Info'.")
-
+    await update.message.reply_text("✅ Bot berhasil dimuat ulang.")
 
 # ----------------------------------------------------------------------
 ## HANDLER PROMOSI & DEMOSI
 # ----------------------------------------------------------------------
 
-# Izin Admin Penuh
-FULL_PERMISSIONS = ChatPermissions(
-    can_manage_chat=True,
-    can_delete_messages=True,
-    can_manage_video_chats=True,
-    can_restrict_members=True,
-    can_promote_members=True,
-    can_change_info=True,
-    can_invite_users=True,
-    can_pin_messages=True
-)
-# Izin Admin Standar (Admin baru, tanpa promote/anonimitas)
-STANDARD_PERMISSIONS = ChatPermissions(
-    can_manage_chat=False,
-    can_delete_messages=True,
-    can_manage_video_chats=False,
-    can_restrict_members=True,
-    can_promote_members=False, # Tidak bisa promote/demote
-    can_change_info=False,
-    can_invite_users=True,
-    can_pin_messages=True
-)
-
 async def promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mempromosikan pengguna yang dibalas dengan izin standar (/promote)."""
     if not await is_group_admin(update, context): return
-    
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin dipromosikan.")
+        await update.message.reply_text("Kalo lu mau promosiin orang buat jadi admin, ya lu harus reply chatnya pake /promote kocak!")
         return
-    
     target_user = target_msg.from_user
     
     try:
+        # Izin standar yang memadai untuk moderasi
         await context.bot.promote_chat_member(
-            chat_id=update.effective_chat.id,
-            user_id=target_user.id,
-            # Promosikan dengan izin standar
-            is_anonymous=False,
-            **STANDARD_PERMISSIONS.to_dict()
+            chat_id=update.effective_chat.id, user_id=target_user.id, is_anonymous=False,
+            can_manage_chat=True, can_delete_messages=True, can_restrict_members=True, 
+            can_pin_messages=True, can_manage_video_chats=False, can_promote_members=False,    
+            can_change_info=False, can_invite_users=True,
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai Admin standar.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai Admin.", parse_mode=ParseMode.MARKDOWN)
         
     except Exception as e:
         logger.error(f"Gagal promote user: {e}")
-        await update.message.reply_text("❌ Gagal mempromosikan. Bot harus Admin dengan izin **'Add new admins'** dan wewenang yang lebih tinggi dari target.")
+        await update.message.reply_text("❌ Gagal mempromosikan mbud, gw kaga lu kasih full akses.")
 
 async def full_promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mempromosikan pengguna yang dibalas dengan izin admin penuh (/fullpromote)."""
     if not await is_group_admin(update, context): return
-    
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin dipromosikan penuh.")
+        await update.message.reply_text("Reply chat orang yang mau dipromosiin jadi admin full akses pake /fullpromote cuqy.")
         return
-    
     target_user = target_msg.from_user
     
     try:
+        # Izin penuh
         await context.bot.promote_chat_member(
-            chat_id=update.effective_chat.id,
-            user_id=target_user.id,
-            # Promosikan dengan izin penuh (termasuk promote/demote)
-            is_anonymous=False,
-            **FULL_PERMISSIONS.to_dict()
+            chat_id=update.effective_chat.id, user_id=target_user.id, is_anonymous=False,
+            can_manage_chat=True, can_delete_messages=True, can_restrict_members=True, 
+            can_pin_messages=True, can_manage_video_chats=True, can_promote_members=True,     
+            can_change_info=True, can_invite_users=True,
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai **Admin Penuh**.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai Admin Penuh.", parse_mode=ParseMode.MARKDOWN)
         
     except Exception as e:
         logger.error(f"Gagal full promote user: {e}")
-        await update.message.reply_text("❌ Gagal mempromosikan penuh. Bot harus Admin dengan izin **'Add new admins'** dan wewenang yang lebih tinggi dari target.")
+        await update.message.reply_text("❌ Gagal mempromosikan mbud, gw kaga lu kasih full akses.")
 
 async def demote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mendemosi pengguna yang dibalas, mencabut status admin (/demote)."""
     if not await is_group_admin(update, context): return
-    
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin didemosi.")
+        await update.message.reply_text("Reply chat orang yang mau didepak dari admin pake /demote ya mbud.")
         return
-    
     target_user = target_msg.from_user
     
-    # Cegah demote diri sendiri atau Creator
     if target_user.id == update.effective_user.id:
-        await update.message.reply_text("Anda tidak bisa mendemosi diri Anda sendiri.")
+        await update.message.reply_text("Lu ga bisa unadmin diri lu sendiri mbud, lucu juga lu wkwkwk.")
         return
     
     try:
-        # Mendemosi berarti mempromosikan kembali tanpa izin admin (is_admin=False)
+        # Mendemosi: mempromosikan kembali tanpa izin admin (semua False)
         await context.bot.promote_chat_member(
-            chat_id=update.effective_chat.id,
-            user_id=target_user.id,
-            can_manage_chat=False,
-            can_delete_messages=False,
-            can_manage_video_chats=False,
-            can_restrict_members=False,
-            can_promote_members=False,
-            can_change_info=False,
-            can_invite_users=False,
-            can_pin_messages=False
+            chat_id=update.effective_chat.id, user_id=target_user.id,
+            can_manage_chat=False, can_delete_messages=False, can_manage_video_chats=False, 
+            can_restrict_members=False, can_promote_members=False, can_change_info=False, 
+            can_invite_users=False, can_pin_messages=False, is_anonymous=False
         )
-        await update.message.reply_text(f"✅ Admin **{target_user.full_name}** telah didemosi menjadi anggota biasa.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Admin **{target_user.full_name}** telah didepak.", parse_mode=ParseMode.MARKDOWN)
         
     except Exception as e:
         logger.error(f"Gagal demote user: {e}")
-        await update.message.reply_text("❌ Gagal mendemosi. Bot harus Admin dan tidak bisa mendemosi Creator grup atau admin yang wewenangnya lebih tinggi.")
+        await update.message.reply_text("❌ Gagal mendepak. Bot harus Admin dan tidak bisa mendepak Owner GC.")
 
 # ----------------------------------------------------------------------
-## HANDLER MODERASI DASAR
+## HANDLER MODERASI DASAR (Mute, Unmute, Pin, Ban)
 # ----------------------------------------------------------------------
 
-# (Mute, Unmute, Pin, Ban - menggunakan fungsi dari skrip sebelumnya)
 async def pin_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menyematkan (pin) pesan yang dibalas."""
     if not await is_group_admin(update, context): return
     if not update.message.reply_to_message:
-        await update.message.reply_text("Mohon balas pesan yang ingin di-pin.")
+        await update.message.reply_text("Reply pesan yang ingin di-pin.")
         return
     try:
         await context.bot.pin_chat_message(
@@ -436,67 +370,67 @@ async def pin_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
         await update.message.reply_text("✅ Pesan berhasil di-pin.")
     except Exception as e:
         logger.error(f"Gagal pin pesan: {e}")
-        await update.message.reply_text("❌ Gagal pin. Pastikan bot adalah Admin dan memiliki izin **'Pin Messages'**.")
+        await update.message.reply_text("❌ Gagal pin nyet, gw kaga lu kasih full akses.")
 
 async def mute_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Membatasi (mute) pengguna yang dibalas (default: 1 jam)."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin di-mute.")
+        await update.message.reply_text("Reply pesan pengguna yang ingin di-mute.")
         return
     target_user = target_msg.from_user
     until_date = update.message.date + timedelta(hours=1)
     try:
+        # Mute: can_send_messages=False (Kompatibel PTB lama)
         await context.bot.restrict_chat_member(
             chat_id=update.effective_chat.id, user_id=target_user.id, until_date=until_date,
             permissions=ChatPermissions(can_send_messages=False),
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah di-mute selama 1 jam.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah di-mute selama 1 jam, banyak tingkah sih.", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
         logger.error(f"Gagal mute user: {e}")
-        await update.message.reply_text("❌ Gagal mute. Pastikan bot memiliki izin **'Restrict Members'**.")
+        await update.message.reply_text("❌ Gagal mute mbud, gw ga lu kasih full akses.")
 
 async def unmute_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Membuka pembatasan (unmute) pengguna yang dibalas."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin di-unmute.")
+        await update.message.reply_text("Reply pesan pengguna yang ingin di-unmute.")
         return
     target_user = target_msg.from_user
     try:
+        # UNMUTE: Hanya menggunakan parameter can_send_messages=True (Kompatibel PTB lama)
         await context.bot.restrict_chat_member(
             chat_id=update.effective_chat.id, user_id=target_user.id,
-            permissions=ChatPermissions(can_send_messages=True, can_send_media_messages=True, can_send_polls=True, can_send_other_messages=True),
+            permissions=ChatPermissions(can_send_messages=True),
         )
         await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah di-unmute.", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
         logger.error(f"Gagal unmute user: {e}")
-        await update.message.reply_text("❌ Gagal unmute. Pastikan bot memiliki izin **'Restrict Members'**.")
+        await update.message.reply_text("❌ Gagal unmute, gw ga lu kasih full akses.")
 
 async def ban_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Memblokir (ban) pengguna yang dibalas."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Mohon balas pesan pengguna yang ingin di-ban.")
+        await update.message.reply_text("Reply pesan pengguna yang ingin di-ban.")
         return
     target_user = target_msg.from_user
     try:
         await context.bot.ban_chat_member(
             chat_id=update.effective_chat.id, user_id=target_user.id
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah diban dari grup secara permanen.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah diban dari grup secara permanen, gegara kurang ajar.", parse_mode=ParseMode.MARKDOWN)
     except Exception as e:
         logger.error(f"Gagal ban user: {e}")
-        await update.message.reply_text("❌ Gagal ban. Pastikan bot memiliki izin **'Ban Users'** dan wewenang yang lebih tinggi dari target.")
-
+        await update.message.reply_text("❌ Gagal ban mbud, gw ga lu kasih full akses.")
 
 # ----------------------------------------------------------------------
 ## HANDLER KONFIGURASI (Private Chat Only)
 # ----------------------------------------------------------------------
-# (set_photo, start_set_button, done_set_button, cancel_set_button, handle_button_input, show_current_config)
 
 @admin_private_only
 async def set_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -518,9 +452,9 @@ async def start_set_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     await update.message.reply_text(
         "📝 Pengaturan Tombol Inline Dimulai\n\n"
         "Silakan masukkan Nama Tombol dan URL Link pada baris baru.\n"
-        "Formatnya adalah: `Nama Tombol Anda URL_LENGKAP`\n"
-        "Contoh: `Gabung Grup https://t.me/grupAnda`\n\n"
-        "Ketik `/donebutton` saat selesai, atau `/cancelbutton` untuk membatalkan."
+        "Formatnya adalah: Nama Tombol Anda URL_LENGKAP\n"
+        "Contoh: Gabung Grup https://t.me/namagrup\n\n"
+        "Ketik /donebutton saat selesai, atau /cancelbutton untuk membatalkan."
     )
 
 @admin_private_only
@@ -529,7 +463,7 @@ async def done_set_button(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     global GLOBAL_BUTTONS_CONFIG
     user_id = update.effective_user.id
     if not context.user_data.get('setting_buttons'):
-        await update.message.reply_text("Anda tidak sedang dalam mode pengaturan tombol.")
+        await update.message.reply_text("Anda tidak sedang dalam mode setting tombol.")
         return
     new_config = BUTTON_SETUP_DATA.pop(user_id, [])
     if new_config:
@@ -566,11 +500,13 @@ async def handle_button_input(update: Update, context: ContextTypes.DEFAULT_TYPE
         return
     url = parts[-1]
     button_text = " ".join(parts[:-1])
+    
     if not url.startswith(('http://', 'https://', 't.me/')):
         await update.message.reply_text(
-            f"❌ Link '{url}' terlihat tidak valid. Pastikan link dimulai dengan `http://`, `https://`, atau `t.me/`.
+            f"❌ Link '{url}' terlihat tidak valid. Pastikan link dimulai dengan `http://`, `https://`, atau `t.me/`."
         )
         return
+    
     BUTTON_SETUP_DATA[user_id].append([button_text, url])
     await update.message.reply_text(
         f"✅ Tombol ditambahkan:\nTeks: {button_text}\nLink: `{url}`\n\nTotal tombol: {len(BUTTON_SETUP_DATA[user_id])}. Lanjutkan atau ketik `/donebutton`.",
@@ -615,19 +551,19 @@ def main() -> None:
         logger.error(f"Gagal membuat aplikasi bot: {e}")
         return
 
-    # --- HANDLER UTILITAS & MODERASI GRUP (Admin Grup) ---
+    # --- HANDLER UTILITIES & MODERATION GRUP (Admin Grup) ---
     application.add_handler(CommandHandler("ping", ping))
     application.add_handler(CommandHandler("pin", pin_message))
     application.add_handler(CommandHandler("mute", mute_user))
     application.add_handler(CommandHandler("unmute", unmute_user))
     application.add_handler(CommandHandler("ban", ban_user))
-    application.add_handler(CommandHandler("vctitle", vctitle))
+    application.add_handler(CommandHandler("gctitle", gctitle)) # Disesuaikan untuk VC Title
     application.add_handler(CommandHandler("promote", promote_user))
     application.add_handler(CommandHandler("fullpromote", full_promote_user))
     application.add_handler(CommandHandler("demote", demote_user))
     application.add_handler(CommandHandler("adminlist", adminlist))
     application.add_handler(CommandHandler("reload", reload_config))
-    application.add_handler(CommandHandler("anonadmin", anonadmin))
+
     application.add_handler(CommandHandler("rules", show_rules))
     application.add_handler(CommandHandler("setrules", set_rules))
     
@@ -647,7 +583,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
     application.add_handler(MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER, lambda u, c: None))
 
-    logger.info("Bot Manager V2 sedang berjalan...")
+    logger.info("Bot Manager Final V4 sedang berjalan...")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
