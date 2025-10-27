@@ -52,7 +52,7 @@ GLOBAL_BUTTONS_CONFIG = [
 ]
 
 BUTTON_SETUP_DATA = {}
-RULES_MESSAGE = "❌ Aturan grup belum ditetapkan. Gunakan /setrules untuk mengaturnya."
+RULES_MESSAGE = (f"<blockquote>❌ Aturan grup belum ditetapkan. Gunakan /setrules untuk mengaturnya.</blockquote>", parse_mode=ParseMode.HTML)
 
 # ----------------------------------------------------------------------
 ## FUNGSI UTILITAS DAN DECORATOR
@@ -93,11 +93,11 @@ def admin_private_only(func):
         
         if update.effective_user.id != admin_id_int:
             if update.effective_chat.type == ChatType.PRIVATE:
-                await update.message.reply_text("𝐋𝐔 𝐁𝐔𝐊𝐀𝐍 𝐀𝐃𝐌𝐈𝐍 𝐁𝐎𝐓 𝐈𝐍𝐈 𝐍𝐘𝐄𝐓!")
+                await update.message.reply_text(f"<blockquote><b>ʟᴜ ʙᴜᴋᴀɴ ᴀᴅᴍɪɴ ʙᴏᴛ ɪɴɪ ɴʏᴇᴛ🖕🏻</b></blockquote>", parse_mode=ParseMode.HTML)
             return
 
         if update.effective_chat.type != ChatType.PRIVATE:
-            await update.message.reply_text("𝐆𝐔𝐍𝐀𝐊𝐀𝐍 𝐏𝐄𝐑𝐈𝐍𝐓𝐀𝐇 𝐈𝐍𝐈 𝐏𝐀𝐃𝐀 𝐏𝐑𝐈𝐕𝐀𝐓𝐄 𝐂𝐇𝐀𝐓 𝐁𝐎𝐓.")
+            await update.message.reply_text(f"<blockquote><b>⚠️ɢᴜɴᴀᴋᴀɴ ᴘᴇʀɪɴᴛᴀʜ ɪɴɪ ᴘᴀᴅᴀ ᴘʀɪᴠᴀᴛᴇ ᴄʜᴀᴛ ʙᴏᴛ.</b></blockquote>", parse_mode=ParseMode.HTML)
             return
 
         return await func(update, context)
@@ -116,7 +116,7 @@ async def is_group_admin(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     )
     
     if chat_member.status not in ['creator', 'administrator']:
-        await update.message.reply_text("⛔️ 𝐋𝐔 𝐁𝐔𝐊𝐀𝐍 𝐀𝐃𝐌𝐈𝐍 𝐍𝐘𝐄𝐓!")
+        await update.message.reply_text(f"<blockquote><b>ʟᴜ ʙᴜᴋᴀɴ ᴀᴅᴍɪɴ ɴʏᴇᴛ🖕🏻</b></blockquote>", parse_mode=ParseMode.HTML)
         return False
     
     return True
@@ -175,14 +175,14 @@ async def set_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     
     if not context.args:
         await update.message.reply_text(
-            "𝐂𝐚𝐫𝐚 𝐠𝐮𝐧𝐚𝐢𝐧𝐧𝐲𝐚 𝐠𝐢𝐧𝐢 𝐧𝐲𝐞𝐭 : /𝘴𝘦𝘵𝘳𝘶𝘭𝘦𝘴 𝐢𝐬𝐢 𝐭𝐞𝐱𝐭 𝐫𝐮𝐥𝐞𝐬 𝐲𝐚𝐧𝐠 𝐦𝐚𝐮 𝐥𝐮 𝐣𝐚𝐝𝐢𝐢𝐧 𝐫𝐮𝐥𝐞𝐬.",
-            parse_mode=ParseMode.MARKDOWN
+            f"<blockquote><b>ᴄᴀʀᴀ ɢᴜɴᴀɪɴɴʏᴀ ɢɪɴɪ ɴʏᴇᴛ :</b> /𝘴𝘦𝘵𝘳𝘶𝘭𝘦𝘴 <b>ɪꜱɪ ᴛᴇxᴛ ʀᴜʟᴇꜱ.</b></blockquote>",
+            parse_mode=ParseMode.HTML
         )
         return
 
     new_rules = " ".join(context.args)
     RULES_MESSAGE = new_rules
-    await update.message.reply_text(f"<blockquote>✅ 𝐑𝐮𝐥𝐞𝐬 𝐬𝐮𝐝𝐚𝐡 𝐝𝐢𝐩𝐞𝐫𝐛𝐚𝐫𝐮𝐢.</blockquote>", parse_mode=ParseMode.HTML)
+    await update.message.reply_text(f"<blockquote><b>✅ ʀᴜʟᴇꜱ ꜱᴜᴅᴀʜ ᴅɪᴘᴇʀʙᴀʀᴜɪ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan aturan grup (/rules)."""
@@ -205,15 +205,15 @@ async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mengukur latency bot (/ping)."""
     if update.effective_chat.type == ChatType.PRIVATE:
-        await update.message.reply_text("ᴘᴏɴɢ! ʙᴏᴛ ᴀᴋᴛɪꜰ.")
+        await update.message.reply_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ʙᴏᴛ ᴀᴋᴛɪꜰ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
         
     start_time = update.message.date.timestamp()
-    sent_message = await update.message.reply_text("ᴘɪɴɢɪɴɢ...")
+    sent_message = await update.message.reply_text(f"<blockquote><b>ᴘɪɴɢɪɴɢ...</b></blockquote>", parse_mode=ParseMode.HTML)
     end_time = sent_message.date.timestamp()
-    latency = round((end_time - start_time) * 1000)
+    latency = round((end_time - start_time) * 163)
     
-    await sent_message.edit_text(f"ᴘᴏɴɢ! 🏓 ꜱᴘᴇᴇᴅ: **{latency}ms**", parse_mode=ParseMode.MARKDOWN)
+    await sent_message.edit_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ꜱᴘᴇᴇᴅ: {latency}ms</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """MENGUBAH NAMA GC"""
