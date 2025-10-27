@@ -52,7 +52,7 @@ GLOBAL_BUTTONS_CONFIG = [
 ]
 
 BUTTON_SETUP_DATA = {}
-RULES_MESSAGE = (f"<blockquote>❌ Aturan grup belum ditetapkan. Gunakan /setrules untuk mengaturnya.</blockquote>", parse_mode=ParseMode.HTML)
+RULES_MESSAGE = "❌ Aturan grup belum ditetapkan. Gunakan /setrules untuk mengaturnya."
 
 # ----------------------------------------------------------------------
 ## FUNGSI UTILITAS DAN DECORATOR
@@ -220,24 +220,24 @@ async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if not await is_group_admin(update, context): return
     
     if not context.args:
-        await update.message.reply_text("Cara gunainnya /gctitle Nama GC")
+        await update.message.reply_text(f"<blockquote><b>ᴄᴀʀᴀ ɢᴜɴᴀɪɴɴʏᴀ /𝘨𝘤𝘵𝘪𝘵𝘭𝘦 ɴᴀᴍᴀ ɢᴄ</b></blockquote>", parse_mode=ParseMode.HTML)
         return
         
     new_title = " ".join(context.args)
-    if len(new_title) > 255:
-        await update.message.reply_text("Judul terlalu panjang. Maksimal 255 karakter.")
+    if len(new_title) > 50:
+        await update.message.reply_text(f"<blockquote><b>ᴊᴜᴅᴜʟ ᴛᴇʀʟᴀʟᴜ ᴘᴀɴᴊᴀɴɢ. ᴍᴀᴋꜱɪᴍᴀʟ 50 ᴋᴀʀᴀᴋᴛᴇʀ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
 
     try:
-        # Menggunakan set_chat_title untuk mengubah Nama Grup, yang akan ditampilkan sebagai judul VC.
+        # Menggunakan set_chat_title untuk mengubah Nama Grup.
         await context.bot.set_chat_title(
             chat_id=update.effective_chat.id,
             title=new_title
         )
-        await update.message.reply_text(f"✅ Nama Grup berhasil diubah menjadi **{new_title}**.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ɴᴀᴍᴀ ɢʀᴜᴘ ʙᴇʀʜᴀꜱɪʟ ᴅɪᴜʙᴀʜ ᴍᴇɴᴊᴀᴅɪ {new_title}.</b></blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal ubah judul GC: {e}")
-        await update.message.reply_text("❌ Gagal mengubah Nama Grup. Pastikan bot memiliki izin Full Akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴɢᴜʙᴀʜ ɴᴀᴍᴀ ɢʀᴜᴘ. ᴘᴀꜱᴛɪᴋᴀɴ ʙᴏᴛ ᴍᴇᴍɪʟɪᴋɪ ɪᴢɪɴ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan daftar admin grup (/adminlist)."""
