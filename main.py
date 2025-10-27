@@ -188,12 +188,12 @@ async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None
     """Menampilkan aturan grup (/rules)."""
     global RULES_MESSAGE
     if update.effective_chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        await update.message.reply_text("Perintah ini hanya berlaku di grup.")
+        await update.message.reply_text(f"<blockquote><b>ᴘᴇʀɪɴᴛᴀʜ ɪɴɪ ʜᴀɴʏᴀ ʙᴇʀʟᴀᴋᴜ ᴅɪ ɢʀᴜᴘ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
 
     try:
         # Coba parsing sebagai HTML/Markdown
-        await update.message.reply_text(RULES_MESSAGE, parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote>{RULES_MESSAGE}</blockquote>", parse_mode=ParseMode.HTML)
     except:
         # Fallback ke teks biasa jika ada error parsing
         await update.message.reply_text(RULES_MESSAGE)
