@@ -182,7 +182,7 @@ async def set_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     new_rules = " ".join(context.args)
     RULES_MESSAGE = new_rules
-    await update.message.reply_text("✅ 𝐑𝐮𝐥𝐞𝐬 𝐬𝐮𝐝𝐚𝐡 𝐝𝐢𝐩𝐞𝐫𝐛𝐚𝐫𝐮𝐢.")
+    await update.message.reply_text(f"<blockquote>✅ 𝐑𝐮𝐥𝐞𝐬 𝐬𝐮𝐝𝐚𝐡 𝐝𝐢𝐩𝐞𝐫𝐛𝐚𝐫𝐮𝐢.</blockquote>", parse_mode=ParseMode.HTML)
 
 async def show_rules(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan aturan grup (/rules)."""
