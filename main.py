@@ -254,12 +254,12 @@ async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             
             if user.is_bot: continue
                 
-            line = f"👤 {user.full_name} (`ᴀᴅᴍɪɴ`)"
+            line = f"👤 {user.full_name} (ᴀᴅᴍɪɴ)"
             
             if status == 'creator':
-                line = f"👑 {user.full_name} (`ᴘᴇᴍɪʟɪᴋ`)"
+                line = f"👑 {user.full_name} (ᴘᴇᴍɪʟɪᴋ)"
             elif admin.custom_title:
-                 line = f"👤 {user.full_name} (`{admin.custom_title}`)"
+                 line = f"👤 {user.full_name} ({admin.custom_title})"
             
             admin_list.append(line)
         
