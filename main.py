@@ -242,7 +242,7 @@ async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan daftar admin grup (/adminlist)."""
     if update.effective_chat.type not in [ChatType.GROUP, ChatType.SUPERGROUP]:
-        await update.message.reply_text("Perintah ini hanya berlaku di grup.")
+        await update.message.reply_text(f"<blockquote><b>ᴘᴇʀɪɴᴛᴀʜ ɪɴɪ ʜᴀɴʏᴀ ʙᴇʀʟᴀᴋᴜ ᴅɪ ɢʀᴜᴘ</b></blockquote>.", parse_mode=ParseMode.HTML)
         return
 
     try:
@@ -263,17 +263,17 @@ async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             
             admin_list.append(line)
         
-        response = f"**Daftar Admin Grup {update.effective_chat.title} ({len(admin_list)}):**\n\n" + "\n".join(admin_list)
-        await update.message.reply_text(response, parse_mode=ParseMode.MARKDOWN)
+        response = f"ᴅᴀꜰᴛᴀʀ ᴀᴅᴍɪɴ ɢʀᴜᴘ {update.effective_chat.title} ({len(admin_list)}):\n\n" + "\n".join(admin_list)
+        await update.message.reply_text(f"<blockquote><b>{response}</b></blockquote>", parse_mode=ParseMode.MARKDOWN)
     
     except Exception as e:
         logger.error(f"Gagal menampilkan adminlist: {e}")
-        await update.message.reply_text("❌ Gagal mengambil daftar admin.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴᴀᴍᴘɪʟᴋᴀɴ ᴅᴀꜰᴛᴀʀ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def reload_config(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Perintah untuk reload konfigurasi (simulasi) oleh admin grup."""
     if not await is_group_admin(update, context): return
-    await update.message.reply_text("✅ Bot berhasil dimuat ulang.")
+    await update.message.reply_text(f"<blockquote><b>✅ ʙᴏᴛ ʙᴇʀʜᴀꜱɪʟ ᴅɪᴍᴜᴀᴛ ᴜʟᴀɴɢ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 # ----------------------------------------------------------------------
 ## HANDLER PROMOSI & DEMOSI
@@ -284,7 +284,7 @@ async def promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Kalo lu mau promosiin orang buat jadi admin, ya lu harus reply chatnya pake /promote kocak!")
+        await update.message.reply_text(f"<blockquote><b>ᴋᴀʟᴏ ʟᴜ ᴍᴀᴜ ᴘʀᴏᴍᴏꜱɪɪɴ ᴏʀᴀɴɢ ʙᴜᴀᴛ ᴊᴀᴅɪ ᴀᴅᴍɪɴ, ʏᴀ ʟᴜ ʜᴀʀᴜꜱ ʀᴇᴘʟʏ ᴄʜᴀᴛɴʏᴀ ᴘᴀᴋᴇ /𝘱𝘳𝘰𝘮𝘰𝘵𝘦 ᴋᴏᴄᴀᴋ!</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
     
@@ -296,18 +296,18 @@ async def promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             can_pin_messages=True, can_manage_video_chats=False, can_promote_members=False,    
             can_change_info=False, can_invite_users=True,
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai Admin.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ {target_user.full_name} ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal promote user: {e}")
-        await update.message.reply_text("❌ Gagal mempromosikan mbud, gw kaga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ᴘᴇʀɪɴᴛᴀʜ ɢᴀɢᴀʟ ɴʏᴇᴛ! ɢᴡ ɢᴀ ʟᴜ ᴋᴀꜱɪʜ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def full_promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mempromosikan pengguna yang dibalas dengan izin admin penuh (/fullpromote)."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Reply chat orang yang mau dipromosiin jadi admin full akses pake /fullpromote cuqy.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴄʜᴀᴛ ᴏʀᴀɴɢ ʏᴀɴɢ ᴍᴀᴜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴊᴀᴅɪ ᴀᴅᴍɪɴ ᴊᴇᴍʙᴏᴅᴅᴅ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
     
@@ -319,23 +319,23 @@ async def full_promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             can_pin_messages=True, can_manage_video_chats=True, can_promote_members=True,     
             can_change_info=True, can_invite_users=True,
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah dipromosikan sebagai Admin Penuh.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ {target_user.full_name} ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal full promote user: {e}")
-        await update.message.reply_text("❌ Gagal mempromosikan mbud, gw kaga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ᴘᴇʀɪɴᴛᴀʜ ɢᴀɢᴀʟ ɴʏᴇᴛ! ɢᴡ ɢᴀ ʟᴜ ᴋᴀꜱɪʜ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def demote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mendemosi pengguna yang dibalas, mencabut status admin (/demote)."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Reply chat orang yang mau didepak dari admin pake /demote ya mbud.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴄʜᴀᴛ ᴏʀᴀɴɢ ʏᴀɴɢ ᴍᴀᴜ ᴅɪᴅᴇᴘᴀᴋ ᴅᴀʀɪ ᴀᴅᴍɪɴ ᴛᴏʟᴏʟ!</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
     
     if target_user.id == update.effective_user.id:
-        await update.message.reply_text("Lu ga bisa unadmin diri lu sendiri mbud, lucu juga lu wkwkwk.")
+        await update.message.reply_text(f"<blockquote><b>📢ʙᴀᴋꜱᴏ ᴋᴏɴᴛᴏʟ! 📢ʙᴀᴋꜱᴏ ᴋᴏɴᴛᴏʟ!</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     
     try:
@@ -346,7 +346,7 @@ async def demote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             can_restrict_members=False, can_promote_members=False, can_change_info=False, 
             can_invite_users=False, can_pin_messages=False, is_anonymous=False
         )
-        await update.message.reply_text(f"✅ Admin **{target_user.full_name}** telah didepak.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴀᴅᴍɪɴ **{target_user.full_name}** ᴛᴇʟᴀʜ ᴅɪᴅᴇᴘᴀᴋ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal demote user: {e}")
@@ -583,7 +583,7 @@ def main() -> None:
     application.add_handler(MessageHandler(filters.StatusUpdate.NEW_CHAT_MEMBERS, welcome_new_member))
     application.add_handler(MessageHandler(filters.StatusUpdate.LEFT_CHAT_MEMBER, lambda u, c: None))
 
-    logger.info("Bot Manager Final V4 sedang berjalan...")
+    logger.info("Bot Kaisar Youdin sedang berjalan...")
     application.run_polling(allowed_updates=Update.ALL_TYPES)
 
 
