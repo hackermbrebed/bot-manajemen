@@ -264,7 +264,7 @@ async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             admin_list.append(line)
         
         response = f"ᴅᴀꜰᴛᴀʀ ᴀᴅᴍɪɴ ɢʀᴜᴘ {update.effective_chat.title} ({len(admin_list)}):\n\n" + "\n".join(admin_list)
-        await update.message.reply_text(f"<blockquote><b>{response}</b></blockquote>", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>{response}</b></blockquote>", parse_mode=ParseMode.HTML)
     
     except Exception as e:
         logger.error(f"Gagal menampilkan adminlist: {e}")
