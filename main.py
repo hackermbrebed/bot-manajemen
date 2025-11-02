@@ -211,9 +211,9 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     start_time = update.message.date.timestamp()
     sent_message = await update.message.reply_text(f"<blockquote><b>ᴘɪɴɢɪɴɢ...</b></blockquote>", parse_mode=ParseMode.HTML)
     end_time = sent_message.date.timestamp()
-    latency = round((end_time - start_time) * 163)
+    latency = round((end_time - start_time) * 0,0)
     
-    await sent_message.edit_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ꜱᴘᴇᴇᴅ: {latency}ms</b></blockquote>", parse_mode=ParseMode.HTML)
+    await sent_message.edit_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ꜱᴘᴇᴇᴅ:</b> {latency}ms</blockquote>", parse_mode=ParseMode.HTML)
 
 async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """MENGUBAH NAMA GC"""
@@ -234,7 +234,7 @@ async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             chat_id=update.effective_chat.id,
             title=new_title
         )
-        await update.message.reply_text(f"<blockquote><b>✅ ɴᴀᴍᴀ ɢʀᴜᴘ ʙᴇʀʜᴀꜱɪʟ ᴅɪᴜʙᴀʜ ᴍᴇɴᴊᴀᴅɪ {new_title}.</b></blockquote>", parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote><b>✅ ɴᴀᴍᴀ ɢʀᴜᴘ ʙᴇʀʜᴀꜱɪʟ ᴅɪᴜʙᴀʜ ᴍᴇɴᴊᴀᴅɪ</b> {new_title}.</blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal ubah judul GC: {e}")
         await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴɢᴜʙᴀʜ ɴᴀᴍᴀ ɢʀᴜᴘ. ᴘᴀꜱᴛɪᴋᴀɴ ʙᴏᴛ ᴍᴇᴍɪʟɪᴋɪ ɪᴢɪɴ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
@@ -296,7 +296,7 @@ async def promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
             can_pin_messages=True, can_manage_video_chats=False, can_promote_members=False,    
             can_change_info=False, can_invite_users=True,
         )
-        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ {target_user.full_name} ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ</b> {target_user.full_name} <b>ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal promote user: {e}")
@@ -319,7 +319,7 @@ async def full_promote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) 
             can_pin_messages=True, can_manage_video_chats=True, can_promote_members=True,     
             can_change_info=True, can_invite_users=True,
         )
-        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ {target_user.full_name} ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ</b> {target_user.full_name} <b>ᴛᴇʟᴀʜ ᴅɪᴘʀᴏᴍᴏꜱɪᴋᴀɴ ᴍᴇɴᴊᴀᴅɪ ᴀᴅᴍɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal full promote user: {e}")
@@ -346,11 +346,11 @@ async def demote_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             can_restrict_members=False, can_promote_members=False, can_change_info=False, 
             can_invite_users=False, can_pin_messages=False, is_anonymous=False
         )
-        await update.message.reply_text(f"<blockquote><b>✅ ᴀᴅᴍɪɴ **{target_user.full_name}** ᴛᴇʟᴀʜ ᴅɪᴅᴇᴘᴀᴋ.</b></blockquote>", parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴀᴅᴍɪɴ</b> {target_user.full_name} <b>ᴛᴇʟᴀʜ ᴅɪᴅᴇᴘᴀᴋ.</b></blockquote>", parse_mode=ParseMode.HTML)
         
     except Exception as e:
         logger.error(f"Gagal demote user: {e}")
-        await update.message.reply_text("❌ Gagal mendepak. Bot harus Admin dan tidak bisa mendepak Owner GC.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴᴅᴇᴘᴀᴋ ❌ ʙᴏᴛ ʜᴀʀᴜꜱ ᴀᴅᴍɪɴ ᴅᴀɴ ᴛɪᴅᴀᴋ ʙɪꜱᴀ ᴍᴇɴᴅᴇᴘᴀᴋ ᴏᴡɴᴇʀ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 # ----------------------------------------------------------------------
 ## HANDLER MODERASI DASAR (Mute, Unmute, Pin, Ban)
@@ -360,44 +360,44 @@ async def pin_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
     """Menyematkan (pin) pesan yang dibalas."""
     if not await is_group_admin(update, context): return
     if not update.message.reply_to_message:
-        await update.message.reply_text("Reply pesan yang ingin di-pin.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴘᴇꜱᴀɴ ʏᴀɴɢ ɪɴɢɪɴ ᴅɪ-ᴘɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     try:
         await context.bot.pin_chat_message(
             chat_id=update.effective_chat.id, message_id=update.message.reply_to_message.message_id,
             disable_notification=True
         )
-        await update.message.reply_text("✅ Pesan berhasil di-pin.")
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇꜱᴀɴ ʙᴇʀʜᴀꜱɪʟ ᴅɪ-ᴘɪɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal pin pesan: {e}")
-        await update.message.reply_text("❌ Gagal pin nyet, gw kaga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴘɪɴ ᴘᴇꜱᴀɴ, ɢᴀ ᴀᴅᴀ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def mute_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Membatasi (mute) pengguna yang dibalas (default: 1 jam)."""
+    """Membatasi (mute) pengguna yang dibalas (default: 24 jam)."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Reply pesan pengguna yang ingin di-mute.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴘᴇꜱᴀɴ ᴘᴇɴɢɢᴜɴᴀ ʏᴀɴɢ ɪɴɢɪɴ ᴅɪ-ᴍᴜᴛᴇ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
-    until_date = update.message.date + timedelta(hours=1)
+    until_date = update.message.date + timedelta(hours=24)
     try:
         # Mute: can_send_messages=False (Kompatibel PTB lama)
         await context.bot.restrict_chat_member(
             chat_id=update.effective_chat.id, user_id=target_user.id, until_date=until_date,
             permissions=ChatPermissions(can_send_messages=False),
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah di-mute selama 1 jam, banyak tingkah sih.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ</b> {target_user.full_name} <b>ᴛᴇʟᴀʜ ᴅɪ-ᴍᴜᴛᴇ ꜱᴇʟᴀᴍᴀ 24 ᴊᴀᴍ ᴋᴀʀᴇɴᴀ ʙᴀɴʏᴀᴋ ᴛɪɴɢᴋᴀʜ.</b></blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal mute user: {e}")
-        await update.message.reply_text("❌ Gagal mute mbud, gw ga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴜᴛᴇ ❌ ɢᴀ ᴀᴅᴀ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def unmute_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Membuka pembatasan (unmute) pengguna yang dibalas."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Reply pesan pengguna yang ingin di-unmute.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴘᴇꜱᴀɴ ᴘᴇɴɢɢᴜɴᴀ ʏᴀɴɢ ɪɴɢɪɴ ᴅɪ-ᴜɴᴍᴜᴛᴇ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
     try:
@@ -406,27 +406,27 @@ async def unmute_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> Non
             chat_id=update.effective_chat.id, user_id=target_user.id,
             permissions=ChatPermissions(can_send_messages=True),
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah di-unmute.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ {target_user.full_name} ᴛᴇʟᴀʜ ᴅɪ-ᴜɴᴍᴜᴛᴇ.</b></blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal unmute user: {e}")
-        await update.message.reply_text("❌ Gagal unmute, gw ga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴜɴᴍᴜᴛᴇ ❌ ɢᴀ ᴀᴅᴀ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def ban_user(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Memblokir (ban) pengguna yang dibalas."""
     if not await is_group_admin(update, context): return
     target_msg = update.message.reply_to_message
     if not target_msg:
-        await update.message.reply_text("Reply pesan pengguna yang ingin di-ban.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ᴘᴇꜱᴀɴ ᴘᴇɴɢɢᴜɴᴀ ʏᴀɴɢ ɪɴɢɪɴ ᴅɪ-ʙᴀɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     target_user = target_msg.from_user
     try:
         await context.bot.ban_chat_member(
             chat_id=update.effective_chat.id, user_id=target_user.id
         )
-        await update.message.reply_text(f"✅ Pengguna **{target_user.full_name}** telah diban dari grup secara permanen, gegara kurang ajar.", parse_mode=ParseMode.MARKDOWN)
+        await update.message.reply_text(f"<blockquote><b>✅ ᴘᴇɴɢɢᴜɴᴀ</b> {target_user.full_name} <b>ᴛᴇʟᴀʜ ᴅɪ-ʙᴀɴ ᴋᴀʀᴇɴᴀ ɢᴀ ᴘᴜɴʏᴀ ᴏᴛᴀᴋ.</b></blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal ban user: {e}")
-        await update.message.reply_text("❌ Gagal ban mbud, gw ga lu kasih full akses.")
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ʙᴀɴ ❌ ɢᴀ ᴀᴅᴀ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 # ----------------------------------------------------------------------
 ## HANDLER KONFIGURASI (Private Chat Only)
@@ -437,11 +437,11 @@ async def set_photo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Mengatur foto penyambutan dari foto yang dibalas (reply)."""
     global GLOBAL_PHOTO_FILE_ID
     if not update.message.reply_to_message or not update.message.reply_to_message.photo:
-        await update.message.reply_text("Mohon balas (reply) ke **FOTO** di chat ini lalu ketik `/setphoto`.")
+        await update.message.reply_text(f"<blockquote><b>ʀᴇᴘʟʏ ꜰᴏᴛᴏ ʏᴀɴɢ ᴍᴀᴜ ᴅɪᴊᴀᴅɪᴋᴀɴ ꜰᴏᴛᴏ ꜱᴀᴍʙᴜᴛᴀɴ.</b></blockquote>", parse_mode=ParseMode.HTML)
         return
     photo_file_id = update.message.reply_to_message.photo[-1].file_id
     GLOBAL_PHOTO_FILE_ID = photo_file_id
-    await update.message.reply_text("✅ Foto penyambutan berhasil diatur!\nFoto ini akan muncul pada sambutan anggota baru.", parse_mode='Markdown')
+    await update.message.reply_text(f"<blockquote><b>✅ ꜰᴏᴛᴏ ᴘᴇɴʏᴀᴍʙᴜᴛᴀɴ ʙᴇʀʜᴀꜱɪʟ ᴅɪꜱᴇᴛᴛɪɴɢ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 @admin_private_only
 async def start_set_button(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
