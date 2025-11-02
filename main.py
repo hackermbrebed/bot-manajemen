@@ -211,9 +211,9 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     start_time = update.message.date.timestamp()
     sent_message = await update.message.reply_text(f"<blockquote><b>ᴘɪɴɢɪɴɢ...</b></blockquote>", parse_mode=ParseMode.HTML)
     end_time = sent_message.date.timestamp()
-    latency = round((end_time - start_time) * 0,0)
+    latency = round((end_time - start_time) * 0.0)
     
-    await sent_message.edit_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ꜱᴘᴇᴇᴅ:</b> {latency}ms</blockquote>", parse_mode=ParseMode.HTML)
+    await sent_message.edit_text(f"<blockquote><b>ᴘᴏɴɢ🏓 ꜱᴘᴇᴇᴅ:</b> {latency} ms</blockquote>", parse_mode=ParseMode.HTML)
 
 async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """MENGUBAH NAMA GC"""
