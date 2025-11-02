@@ -237,7 +237,7 @@ async def gctitle(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         await update.message.reply_text(f"<blockquote><b>✅ ɴᴀᴍᴀ ɢʀᴜᴘ ʙᴇʀʜᴀꜱɪʟ ᴅɪᴜʙᴀʜ ᴍᴇɴᴊᴀᴅɪ</b> {new_title}.</blockquote>", parse_mode=ParseMode.HTML)
     except Exception as e:
         logger.error(f"Gagal ubah judul GC: {e}")
-        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴɢᴜʙᴀʜ ɴᴀᴍᴀ ɢʀᴜᴘ. ᴘᴀꜱᴛɪᴋᴀɴ ʙᴏᴛ ᴍᴇᴍɪʟɪᴋɪ ɪᴢɪɴ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
+        await update.message.reply_text(f"<blockquote><b>❌ ɢᴀɢᴀʟ ᴍᴇɴɢᴜʙᴀʜ ɴᴀᴍᴀ ɢʀᴜᴘ ❌ ᴘᴀꜱᴛɪᴋᴀɴ ʙᴏᴛ ᴍᴇᴍɪʟɪᴋɪ ɪᴢɪɴ ꜰᴜʟʟ ᴀᴋꜱᴇꜱ.</b></blockquote>", parse_mode=ParseMode.HTML)
 
 async def adminlist(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Menampilkan daftar admin grup (/adminlist)."""
